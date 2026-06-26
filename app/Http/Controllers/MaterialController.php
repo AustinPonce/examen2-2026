@@ -24,6 +24,19 @@ class MaterialController extends Controller
     }
 
     /**
+     * GET http://localhost:8000/api/materiales
+     * Obtener la lista de materiales con su categoría asociada.
+     */
+    public function index(): JsonResponse
+    {
+        $materiales = Material::with('categoria')->get();
+
+        return response()->json([
+            'data' => $materiales,
+        ], 200);
+    }
+
+    /**
      * PUT http://localhost:8000/api/materiales/{id}
      * Actualizar un material existente.
      */
