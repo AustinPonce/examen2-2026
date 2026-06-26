@@ -22,4 +22,25 @@ class MaterialController extends Controller
 
         return response()->json($material, 201);
     }
+
+    /**
+     * PUT http://localhost:8000/api/materiales/{id}
+     * Actualizar un material existente.
+     */
+    public function update(Request $request, int $id): JsonResponse
+    {
+        $material = Material::findOrFail($id);
+
+        $validated = $request->validate([
+            'unidad_medida' => 'sometimes|required|string|max:255',
+            'descripcion'   => 'sometimes|required|string|max:255',
+            'ubicacion'     => 'sometimes|required|string|max:255',
+            'categoria_id'  => 'sometimes|required|integer|exists:categorias,id',
+        ]);
+
+        $material->update($validated);
+        $material->load('categoria');
+
+        return response()->json($material);
+    }
 }
